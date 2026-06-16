@@ -1,5 +1,8 @@
 import sqlite3
 from tabulate import tabulate
+import sys
+from easygui import *
+
 # This is the filename of the database to be used
 DB_NAME = 'GPU_database.db'
 
@@ -17,28 +20,14 @@ def print_query(view_name:str):
     cursor.execute(field_names)
     headings = list(sum(cursor.fetchall(),()))
     # Print the results in a table with the headings
-    print(tabulate(results,headings))
+    codebox("Here are the results of your query:", "Query results", tabulate(results,headings))
     db.close()
 
 choice = ''
-while choice != 'Z':
-    choice = input('Welcome to the GPU interface\n\n'
-                   'Type the letter for the info you want:\n'
-                   'A: ALl info in our database\n'
-                   'B: Average to cheap NVIDIA products\n'
-                   'C: GPUs with average or better preformance (include top of the end ones)\n'
-                   'D: GPUs that are cheaper than 500 USD\n'
-                   'E: NVIDIA products with an upscaling gen of DLSS 4 and DLSS next gen\n'
-                    'Z: Exit\n\nType option here: ').upper()
-    if choice == 'A':
-        print_query('All_info')
-    elif choice == 'B':
-        print_query('avg_to_cheap_NVIDIA')
-    elif choice == 'C':
-        print_query('Avg_to_good_performance')
-    elif choice == 'D':
-        print_query('GPUs_below_or_equal_$500')
-    elif choice == 'E':
-        print_query('NVIDIA_with_great_upscaling_gen')
-    else:
-        print("bye")
+while True:
+    msg ="What do you want to see?"
+    title = "Music lessons"
+    choices = ["All_info", "Avg_to_good_performance", "GPUs_below_or_equal_$500", "NVIDIA_with_great_upscaling_gen", "Top_10_cheapest", "Top_10_expensive", "Value_for_money", "avg_to_cheap_NVIDIA"]
+    choice = choicebox(msg, title, choices)
+    if choice == None: sys.exit()
+    print_query(choice)
