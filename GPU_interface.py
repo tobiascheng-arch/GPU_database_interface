@@ -5,10 +5,11 @@ from easygui import *
 
 # This is the filename of the database to be used
 DB_NAME = 'GPU_database.db'
-TABLES = ("GPU_database"
-        "LEFT JOIN Interfaces ON GPU_database.Interface_id = Interfaces.Interface_id"
-        "LEFT JOIN Manufacture ON GPU_database.Manufacture_ID = Manufacture.Manufacture_ID"
-        "LEFT JOIN Memory ON GPU_database.Memory_id = Memory.Memory_id")
+TABLES = (" GPU_database "
+        "LEFT JOIN Interfaces ON GPU_database.Interface_id = Interfaces.Interface_id "
+        "LEFT JOIN Manufacture ON GPU_database.Manufacture_ID = Manufacture.Manufacture_ID "
+        "LEFT JOIN Memory ON GPU_database.Memory_id = Memory.Memory_id "
+        "LEFT JOIN Upscaling ON GPU_database.Upscaling_id = Upscaling.Upscaling_id ")
 
 #Print query function - prints out existing queries from sqlite
 def print_query(view_name:str):
@@ -40,7 +41,7 @@ def print_parameter_query(fields:str, where:str, parameter):
 while True:
     msg ="What do you want to see?"
     title = "GPU database"
-    choices = ["Queries", "Manufacturer", "Model", "VRAM", "Memory type", "Bus (in bits)", "Release year", "GPU boost clock (MHz)","Power (W)", "Interface", "Length", "Ray tracing", "Price range", "Performance rated by ai", "Upscaling Gen" ]
+    choices = ["Queries", "Manufacturer", "Model", "VRAM", "Memory type", "Bus (in bits)", "Release year", "GPU boost clock (MHz)","Power (W)", "Interface", "Length", "Ray tracing", "Price range", "Performance rated by ai", "Upscaling Gen"]
     choice = choicebox(msg, title, choices)
 
     if choice == "Queries":
@@ -52,32 +53,95 @@ while True:
         print_query(query)
     
     elif choice == "Manufacturer":
-        print(1)
+        msg ="What manufacturer do you want to see?"
+        title = "GPU database"
+        choices = ["NVIDIA", "AMD", "Intel"]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
+        print_parameter_query("Manufacturer, Model, [VRAM_(GB)], Memory_type, [Bus_(bit)], Release_year, [GPU_boost_clock_(MHz)], [Power_(W)], Interface, [Length_(mm)], Ray_tracing, [Price_(USD)], [Performance_(rated_by_ai)], Upscaling_gen", 
+                            "Manufacturer = ? ORDER BY Model Asc",choice)
+
+
     elif choice == "Model":
-        print(2)
+        msg ="What model do you want to see?"
+        title = "GPU database"
+        choices = [""]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
+        print_parameter_query("Manufacturer, Model, [VRAM_(GB)], Memory_type, [Bus_(bit)], Release_year, [GPU_boost_clock_(MHz)], [Power_(W)], Interface, [Length_(mm)], Ray_tracing, [Price_(USD)], [Performance_(rated_by_ai)], Upscaling_gen", 
+                            "Manufacturer = ? ORDER BY Model Asc",choice)
+
     elif choice == "VRAM":
-        print(3)
+        msg ="How much Vram do you need?"
+        title = "GPU database"
+        choices = [""]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
     elif choice == "Memory type":
-        print(4)
+        msg ="What type of memory do you want to see?"
+        title = "GPU database"
+        choices = [""]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
     elif choice == "Bus (in bits)":
-        print(5)
+        msg ="How much do you need?"
+        title = "GPU database"
+        choices = [""]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
     elif choice == "Release year":
-        print(6)
+        msg ="What year do you want to see?"
+        title = "GPU database"
+        choices = [""]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
     elif choice == "GPU boost clock (MHz)":
-        print(7)
+        msg ="What do you want to see?"
+        title = "GPU database"
+        choices = [""]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
     elif choice == "Power (W)":
-        print(8)
+        msg ="How efficient do you want it?"
+        title = "GPU database"
+        choices = [""]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
     elif choice == "Interface":
-        print(9)
+        msg ="What do you want to see?"
+        title = "GPU database"
+        choices = [""]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
     elif choice == "Length":
-        print(10)
+        msg ="What size do you want to see?"
+        title = "GPU database"
+        choices = [""]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
     elif choice == "Ray tracing":
-        print(11)
+        msg ="Do you want Ray tracing?"
+        title = "GPU database"
+        choices = ["Yes", "No"]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
     elif choice == "Price range":
-        print(12)
+        msg ="What query do you want to see?"
+        title = "GPU database"
+        choices = [""]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
     elif choice == "Performance rated by ai":
-        print(13)
+        msg ="How fast do you want your GPU?"
+        title = "GPU database"
+        choices = [""]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
     elif choice == "Upscaling Gen":
-        print(14)
+        msg ="What Upscaling Gen do you want?"
+        title = "GPU database"
+        choices = [""]
+        choice = choicebox(msg, title, choices)
+        if choice == None: sys.exit()
     else:
         sys.exit()
