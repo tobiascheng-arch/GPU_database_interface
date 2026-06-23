@@ -204,26 +204,30 @@ while True:
         choice1 = integerbox(msg, title, default=119,
                         lowerbound= 119,
                         upperbound=1999)
+        if choice1 == None: sys.exit()
         if choice1 != 1999:
             msg = f"Now pick your maximum (Between {choice1} and 1999 USD):"
             choice2 = integerbox(msg, title, default=choice1,
                             lowerbound=choice1,
                             upperbound=1999)
         elif choice1 == 1999: choice2 = 1999
-        if choice1 == None or choice2 == None: sys.exit()
+        if choice2 is None: sys.exit()
         print_parameter_query2(ALL_FIELDS, "Price_USD BETWEEN ? AND ? ORDER BY PRICE_USD ASC, Performance_rated_by_ai DESC", choice1, choice2)
 
     elif choice == "Performance rated by ai":
-        msg ="How fast do you want your GPU?"
+        msg ="Pick the minimun rating you want"
         title = "GPU database"
-        choices = [""]
-        choice = choicebox(msg, title, choices)
-        if choice == None: sys.exit()
+        rating = integerbox(msg, title,
+                        lowerbound= 18,
+                        upperbound=1999)
+        if rating == None: sys.exit()
+        print_parameter_query2(ALL_FIELDS, "Performance_rated_by_ai = ? ORDER BY Performance ASC, Model ASC", choice, 100)
     elif choice == "Upscaling Gen":
         msg ="What Upscaling Gen do you want?"
         title = "GPU database"
-        choices = [""]
+        choices = ["Upscaling_gen", "DLSS (next-gen)", "DLSS 2", "DLSS 3", "None", "FSR 3", "FSR 2", "XeSS"]
         choice = choicebox(msg, title, choices)
         if choice == None: sys.exit()
+        print_parameter_query(ALL_FIELDS, "Upscaling_gen = ? ORDER BY Upscaling_Gen ASC, Model ASC", choice)
     else:
         sys.exit()
