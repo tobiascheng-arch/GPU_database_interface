@@ -253,7 +253,7 @@ while True:
                             upperbound=1999)
         elif price_choice1 == 1999: price_choice2 = 1999
         if price_choice2 == None: continue
-        print_parameter_query2(ALL_FIELDS, "Price_USD BETWEEN ? AND ? ORDER BY PRICE_USD ASC, Performance_rated_by_ai DESC", price_choice1, choice2)
+        print_parameter_query2(ALL_FIELDS, "Price_USD BETWEEN ? AND ? ORDER BY PRICE_USD ASC, Performance_rated_by_ai DESC", price_choice1, price_choice2)
 
     #If they choose Performance, IT asks the user to pick a minimun num and a max num that must be equal or bigger than the min, 
     #That is the range, then prints out a table with a Performance range of that range given
