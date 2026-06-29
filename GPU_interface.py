@@ -29,7 +29,7 @@ def print_query(view_name:str):
     cursor.execute(field_names)
     headings = list(sum(cursor.fetchall(),()))
     # Print the results in a table with the headings
-    codebox("Here are the results of your query:", "Query results", tabulate(results,headings))
+    codebox("Here are the results of your query:", "Query results", tabulate(results,headings, tablefmt="double_grid"))
     db.close()
 
 
@@ -41,7 +41,7 @@ def print_parameter_query(fields:str, where:str, parameter):
     sql = ("SELECT " + fields + " FROM " + TABLES + " WHERE " + where)
     cursor.execute(sql,(parameter,))
     results = cursor.fetchall()
-    codebox("Here are the results:", "Results:", tabulate(results,fields.split(",")))
+    codebox("Here are the results:", "Results:", tabulate(results,fields.split(","), tablefmt="double_grid"))
     db.close()
     
 #Print parameter function with 2 parameters instead - does the same as the first one but has two parameters e.g. min and max limit for cost
@@ -52,7 +52,7 @@ def print_parameter_query2(fields:str, where:str, parameter, parameter2):
     sql = ("SELECT " + fields + " FROM " + TABLES + " WHERE " + where)
     cursor.execute(sql,(parameter, parameter2, ))
     results = cursor.fetchall()
-    codebox("Here are the results:", "Results:", tabulate(results,fields.split(",")))
+    codebox("Here are the results:", "Results:", tabulate(results,fields.split(","), tablefmt="double_grid"))
     db.close()  
 
 #added ALL_FIELDS to make it look cleaner
@@ -258,13 +258,13 @@ while True:
     #If they choose Performance, IT asks the user to pick a minimun num and a max num that must be equal or bigger than the min, 
     #That is the range, then prints out a table with a Performance range of that range given
     elif choice == "Performance rated by ai":
-        msg ="Pick the minimun rating you want:"
+        msg ="Pick the minimun rating you want (0 - 100):"
         title = "GPU database"
         rating = integerbox(msg, title,
                         lowerbound= 0,
                         upperbound=100)
         if rating == None: continue
-        print_parameter_query2(ALL_FIELDS, "Performance_rated_by_ai = ? ORDER BY Performance_rated_by_ai ASC, Model ASC", rating, 100)
+        print_parameter_query2(ALL_FIELDS, "Performance_rated_by_ai BETWEEN ? AND ? ORDER BY Performance_rated_by_ai ASC, Model ASC", rating, 100)
 
     #If they pick Upscaling Gen, it asks them to pick one, then prints the table into a codebox
     elif choice == "Upscaling Gen":
@@ -272,5 +272,5 @@ while True:
         title = "GPU database"
         choices = ["DLSS (next-gen)", "DLSS 2", "DLSS 3", "None", "FSR 3", "FSR 2", "XeSS"]
         gen_choice = choicebox(msg, title, choices)
-        if gen_choice == None: sys.exit()
+        if gen_choice == None: continue
         print_parameter_query(ALL_FIELDS, "Upscaling_gen = ? ORDER BY Upscaling_Gen ASC, Model ASC", gen_choice)
