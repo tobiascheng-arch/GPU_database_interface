@@ -56,14 +56,14 @@ def print_parameter_query2(fields:str, where:str, parameter, parameter2):
     db.close()  
 
 #added ALL_FIELDS to make it look cleaner
-ALL_FIELDS = "Manufacturer, Model, VRAM_GB, Memory_type, Bus_bit, Release_year, GPU_boost_clock_MHz, Power_W, Interface, Length_mm, Ray_tracing, Price_USD, Performance_rated_by_ai, Upscaling_gen"
+ALL_FIELDS = "manufacturer, model, vram_gb, memory_type, bus_bit, release_year, gpu_boost_clock_mhz, power_w, interface, length_mm, ray_tracing, price_usd, performance_rated_by_ai, upscaling_gen"
 
 #While loop that loops until "x" or cancel is pressed, loops through asking the user what they need
 while True:
     #ASks user for what they want, queries, or individual thing that becomes a parameter
     msg ="What do you want to see?"
     title = "GPU database"
-    choices = ["Queries", "Manufacturer", "Model", "VRAM", "Memory type", "Bus (in bits)", "Release year", "GPU boost clock (MHz)","Power (W)", "Interface", "Length", "Ray tracing", "Price range", "Performance rated by ai", "Upscaling Gen"]
+    choices = ["Queries", "Manufacturer", "Model", "VRAM", "Memory type", "Bus in bits", "Release year", "GPU boost clock MHz","Power W", "Interface", "Length", "Ray tracing", "Price range", "Performance rated by ai", "Upscaling Gen"]
     choice = choicebox(msg, title, choices)
     
     #Chcks if the x buttons is pressed
@@ -85,7 +85,7 @@ while True:
         manu_choice = choicebox(msg, title, choices)
         if manu_choice == None: continue
         print_parameter_query(ALL_FIELDS, 
-                            "Manufacturer = ? ORDER BY Model Asc",manu_choice)
+                            "manufacturer = ? ORDER BY Model Asc",manu_choice)
 
     #If they choose model, it asks them to pick one, then prints the table into a codebox
     elif choice == "Model":
@@ -95,7 +95,7 @@ while True:
         model_choice = choicebox(msg, title, choices)
         if model_choice == None: continue
         print_parameter_query(ALL_FIELDS, 
-                            "Model LIKE ? ORDER BY Model Asc", f"%{model_choice}%")
+                            "model LIKE ? ORDER BY model Asc", f"%{model_choice}%")
 
     #If the choose VRAM, it asks the user to input a number between 4 - 32, that will be the min, 
     # Then asks the user to input their max between their chosen min and 32.
@@ -125,7 +125,7 @@ while True:
                 msgbox("You must pick a number that is a multiple of 4!", title)
         elif ramchoice1 == 32: ramchoice2 = 32
         if ramchoice2 == None: continue
-        print_parameter_query2(ALL_FIELDS, "VRAM_GB BETWEEN ? AND ? ORDER BY VRAM_GB DESC, Model ASC", ramchoice1, ramchoice2)
+        print_parameter_query2(ALL_FIELDS, "vram_gb BETWEEN ? AND ? ORDER BY vram_gb DESC, Model ASC", ramchoice1, ramchoice2)
 
     #If they chose Memory, it asks them to pick one, then prints the table into a codebox
     elif choice == "Memory type":
@@ -135,7 +135,7 @@ while True:
         mem_choice = choicebox(msg, title, choices)
         if mem_choice == None: continue
         print_parameter_query(ALL_FIELDS,   
-                            "Memory_type = ? ORDER BY Memory_type Asc, Model ASC", mem_choice)
+                            "memory_type = ? ORDER BY memory_type Asc, model ASC", mem_choice)
 
     #If they choose Bus in bits, IT asks the user to pick a minimun num and a max num that must be equal or bigger than the min, 
     #That is the range, then prints out a table with a Bit range of that range given
@@ -153,7 +153,7 @@ while True:
                             upperbound=512)
         elif bus_choice1 == 512: bus_choice2 = 512
         if bus_choice2 == None: continue
-        print_parameter_query2(ALL_FIELDS, "Bus_bit BETWEEN ? AND ? ORDER BY VRAM_GB DESC, Model ASC", bus_choice1, bus_choice2)
+        print_parameter_query2(ALL_FIELDS, "bus_bit BETWEEN ? AND ? ORDER BY vram_gb DESC, model ASC", bus_choice1, bus_choice2)
 
     #If release year is chosen, It asks the user to type a year between 2016 and 2025, then prints out all of the GPUs release on that year
     elif choice == "Release year":
@@ -162,8 +162,8 @@ while True:
         year_choice = integerbox(msg, title, default=2016,
                         lowerbound= 2016,
                         upperbound= 2025)
-        if choice == None: sys.exit()
-        print_parameter_query(ALL_FIELDS, "Release_year = ? ORDER BY Manufacturer ASC, Model ASC", year_choice)
+        if year_choice == None:  continue
+        print_parameter_query(ALL_FIELDS, "release_year = ? ORDER BY manufacturer ASC, model ASC", year_choice)
 
     #If they choose GPU_boost_clock, IT asks the user to pick a minimun num and a max num that must be equal or bigger than the min, 
     #That is the range, then prints out a table with a MHz of that range given
@@ -173,7 +173,7 @@ while True:
         boost_choice1 = integerbox(msg, title, default=1582,
                         lowerbound= 1582,
                         upperbound=2815)
-        if boost_choice1 == None: sys.exit()
+        if boost_choice1 == None: continue
         if boost_choice1 != 2815:
             msg = f"Now pick your maximum (Between {boost_choice1}MHz and 2815MHz):"
             boost_choice2 = integerbox(msg, title, default=boost_choice1,
@@ -181,7 +181,7 @@ while True:
                             upperbound=2815)
         elif boost_choice1 == 2815: boost_choice2 = 2815
         if boost_choice2 == None: continue
-        print_parameter_query2(ALL_FIELDS, "GPU_boost_clock_MHz BETWEEN ? AND ? ORDER BY GPU_boost_clock_MHz DESC, Model ASC", boost_choice1, boost_choice2)
+        print_parameter_query2(ALL_FIELDS, "gpu_boost_clock_mhz BETWEEN ? AND ? ORDER BY gpu_boost_clock_mhz DESC, model ASC", boost_choice1, boost_choice2)
 
     #If they choose Power (w), IT asks the user to pick a minimun num and a max num that must be equal or bigger than the min, 
     #That is the range, then prints out a table with a Power usage range of that range given
@@ -197,9 +197,9 @@ while True:
             power_choice2 = integerbox(msg, title, default=power_choice1,
                             lowerbound=power_choice1,
                             upperbound=600)
+            if power_choice2 == None: continue
         elif power_choice1 == 600: power_choice2 = 600
-        if power_choice2 == None: continue
-        print_parameter_query2(ALL_FIELDS, "Power_W BETWEEN ? AND ? ORDER BY Power_W ASC, Model ASC", power_choice1, power_choice2)
+        print_parameter_query2(ALL_FIELDS, "power_w BETWEEN ? AND ? ORDER BY power_w ASC, model ASC", power_choice1, power_choice2)
 
     #if the pick Interface, it asks them to pick one, then prints the table into a codebox
     elif choice == "Interface":
@@ -208,7 +208,7 @@ while True:
         choices = ["PCIe 5.0 x16", "PCIe 4.0 x16", "PCIe 4.0 x8", "PCIe 3.0 x16", "PCIe 4.0 x4"]
         interface_choice = choicebox(msg, title, choices)
         if interface_choice == None: continue
-        print_parameter_query(ALL_FIELDS, "Interface = ? ORDER BY Interface ASC, Model ASC", interface_choice)
+        print_parameter_query(ALL_FIELDS, "interface = ? ORDER BY interface ASC, model ASC", interface_choice)
 
     #If they choose Length, IT asks the user to pick a minimun num and a max num that must be equal or bigger than the min, 
     #That is the range, then prints out a table with a Size range of that range given
@@ -224,9 +224,9 @@ while True:
             length_choice2 = integerbox(msg, title, default=length_choice1,
                             lowerbound=length_choice1,
                             upperbound=345)
-        elif length_choice1 == 345: length_choice2 = 345
         if length_choice2 == None: continue
-        print_parameter_query2(ALL_FIELDS, "Length_mm BETWEEN ? AND ? ORDER BY Length_mm ASC, Model ASC", length_choice1, length_choice2)
+        elif length_choice1 == 345: length_choice2 = 345
+        print_parameter_query2(ALL_FIELDS, "length_mm BETWEEN ? AND ? ORDER BY length_mm ASC, model ASC", length_choice1, length_choice2)
 
     #IF they pick Ray tracing, it asks them to pick yes or no, then prints the table into a codebox
     elif choice == "Ray tracing":
@@ -235,7 +235,7 @@ while True:
         choices = ["Yes", "No"]
         ray_choice = choicebox(msg, title, choices)
         if ray_choice == None: continue
-        print_parameter_query(ALL_FIELDS, "Ray_tracing = ? ORDER BY Manufacturer ASC, Model ASC", ray_choice)
+        print_parameter_query(ALL_FIELDS, "ray_tracing = ? ORDER BY manufacturer ASC, model ASC", ray_choice)
 
     #If they choose price range, IT asks the user to pick a minimun num and a max num that must be equal or bigger than the min, 
     #That is the range, then prints out a table with a price range of that range given
@@ -251,9 +251,9 @@ while True:
             price_choice2 = integerbox(msg, title, default=price_choice1,
                             lowerbound=price_choice1,
                             upperbound=1999)
-        elif price_choice1 == 1999: price_choice2 = 1999
         if price_choice2 == None: continue
-        print_parameter_query2(ALL_FIELDS, "Price_USD BETWEEN ? AND ? ORDER BY PRICE_USD ASC, Performance_rated_by_ai DESC", price_choice1, price_choice2)
+        elif price_choice1 == 1999: price_choice2 = 1999
+        print_parameter_query2(ALL_FIELDS, "price_usd BETWEEN ? AND ? ORDER BY price_usd ASC, performance_rated_by_ai DESC", price_choice1, price_choice2)
 
     #If they choose Performance, IT asks the user to pick a minimun num and a max num that must be equal or bigger than the min, 
     #That is the range, then prints out a table with a Performance range of that range given
@@ -264,7 +264,7 @@ while True:
                         lowerbound= 0,
                         upperbound=100)
         if rating == None: continue
-        print_parameter_query2(ALL_FIELDS, "Performance_rated_by_ai BETWEEN ? AND ? ORDER BY Performance_rated_by_ai ASC, Model ASC", rating, 100)
+        print_parameter_query2(ALL_FIELDS, "performance_rated_by_ai BETWEEN ? AND ? ORDER BY performance_rated_by_ai ASC, model ASC", rating, 100)
 
     #If they pick Upscaling Gen, it asks them to pick one, then prints the table into a codebox
     elif choice == "Upscaling Gen":
@@ -273,4 +273,4 @@ while True:
         choices = ["DLSS (next-gen)", "DLSS 2", "DLSS 3", "None", "FSR 3", "FSR 2", "XeSS"]
         gen_choice = choicebox(msg, title, choices)
         if gen_choice == None: continue
-        print_parameter_query(ALL_FIELDS, "Upscaling_gen = ? ORDER BY Upscaling_Gen ASC, Model ASC", gen_choice)
+        print_parameter_query(ALL_FIELDS, "upscaling_gen = ? ORDER BY upscaling_Gen ASC, model ASC", gen_choice)
